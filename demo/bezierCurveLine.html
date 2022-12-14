@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html>
+<body>
+<canvas id="canvas"width='1024'height='1024'></canvas>
+</body>
+</html>
+<script>
+	var canvas = document.getElementById('canvas');
+	function arcToBezier(r,cx,cy,startAngle,endAngle){
+      var x0 = cx + Math.cos(startAngle)*r;
+      var y0 = cy + Math.sin(startAngle)*r;
+      var x3 = cx + Math.cos(endAngle)*r;
+      var y3 = cy + Math.sin(endAngle)*r;
+      var addAngle = endAngle - startAngle;
+      var a = 4*Math.tan(addAngle/4)/3;
+      var x1 = x0 - a*(y0 - cy);
+      var y1 = y0 + a*(x0 - cx);
+      var x2 = x3 + a*(y3 - cy);
+      var y2 = y3 - a*(x3 - cx);
+      return{
+        "x0":x0,"y0":y0,
+        "x1":x1,"y1":y1,
+        "x2":x2,"y2":y2,
+        "x3":x3,"y3":y3
+      }
+  }
+  function drawCCanvas(ctx){
+    var timer = null;
+    var time = 1000;//动画时间ms
+    var s = 1000/60//每帧时间ms
+    var t = time/s;//canvas绘图所需要的步数
+    var pi = Math.PI;
+    var avgAngle = 2*pi/t;//步幅
+    var startAngle = pi/3;
+    var flag = 0;
+    var r = 95;
+    var point={x:150,y:150};
+    var x = point.x+Math.cos(startAngle)*r;
+    var y = point.y+Math.sin(startAngle)*r
+  	ctx.moveTo(x, y);
+    timer = setInterval(()=>{
+      if(flag<= t){
+        var angle = flag*avgAngle+startAngle;
+        ctx.arc(point.x,point.y,r,angle,angle+avgAngle,0,0);
+        ctx.stroke();
+        flag++;
+      }else{
+        clearInterval(timer);
+      }
+    },s)
+  }
+  var step = 20;
+  var obj;
+  var pi = Math.PI;
+  var avg = pi/step;
+  var initialAngle = pi/2;
+  if (canvas.getContext) {
+    var ctx = canvas.getContext('2d');
+	for(let angle=0;angle<step;angle++){
+      var startAngle = initialAngle + avg*angle;
+      var endAngle  = avg*angle + avg + initialAngle;
+      obj = arcToBezier(95,150, 150, startAngle, endAngle);
+      
+      //ctx.moveTo(obj.x0,obj.y0);
+      ctx.quadraticCurveTo(obj.x1 ,obj.y1, obj.x2,obj.y2,obj.x3,obj.y3);
+      ctx.stroke();
+    }
+    //drawCanvas(ctx)
+  }
+   
+</script>

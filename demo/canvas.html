@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>canvas</title>
+</head>
+<style>
+body,html{padding:0;margin:0;}
+#myCanvas{background:url('./img/dragonQuest.jpg') cover}
+</style>
+<body>
+
+<canvas id= "myCanvas" width=400 height=300>您的浏览器不支持canvas属性，请换其他浏览器</canvas>
+
+
+</body>
+</html>
+<script>
+window.onload = function(){
+
+(function(){
+const myCanvas = document.getElementById("myCanvas");
+const cw = myCanvas.width;
+const ch = myCanvas.height;
+let ctx;
+if(myCanvas.getContext){
+ctx = myCanvas.getContext('2d');
+}else{
+return;
+}
+function drawRect(rx, ry, rw, rh){
+const font = 20;
+ctx.save();
+const ox = cw/2 - rw/2;
+const oy = ch/2 - rh/2;
+ctx.moveTo(ox, oy);
+ctx.fillStyle = '#eee';
+ctx.fillRect(rx, ry, rw, rh);
+ctx.font = `${font}px 微软雅黑`;
+ctx.textBaseline = 'middle';
+ctx.textAlign = 'center';
+ctx.fillStyle = '#333';
+ctx.fillText('刮刮乐',ox+rw/2, oy+rh/2)
+ctx.restore()
+}
+
+
+const rw = 200;
+const rh = 150;
+drawRect(cw/2 - rw/2, ch/2 - rh/2, rw, rh);
+
+let canMove = false;//默认在canvas内不能通过移动擦除蒙版
+
+myCanvas.onmousedown = function(e){//有效区域x=[100,300];y=[75,225]
+console.log(e.target)
+const flagX = e.pageX >= 100 && e.pageX <= 300;
+const flagY = e.pageY >= 75 && e.pageY <= 225;
+if(flagX &&flagY ){
+//console.log(e.clientX, e.clientY, e.pageX, e.pageY );
+canMove = true;
+}
+//e.preventDefault();
+}
+
+myCanvas.onmousemove = (e) => {
+
+const flagX = e.pageX >= 100 && e.pageX <= 300;
+const flagY = e.pageY >= 75 && e.pageY <= 225;
+if(canMove && flagX &&flagY){
+console.log(ctx);
+}else{return;}
+
+}
+
+myCanvas.onmouseup = (e) => {
+ canMove = false;
+return false;
+}
+
+})()
+
+document.oncontextmenu = function(e){
+return false;
+//e.preventDefault();
+}
+
+}
+
+</script>

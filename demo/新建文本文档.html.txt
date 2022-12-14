@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>菜鸟教程(runoob.com)</title>
+</head>
+<body>
+
+	<div>
+		<svg width="500" height="500">
+			 <circle cx="70"cy="30"r="40" fill="none"stroke-width="1"stroke="blue"></circle>
+			<path d="M30 30A40 40 0 0 0 110 30"stroke-width=0.5 stroke='black' fill="none" />
+			<path class='dashoffset' stroke="blue" stroke-width='1' d="M100 100l100 0l0 100l-100 0l0 -100"fill='none'stroke-dasharray='5'stroke-dashoffset='130'></path>
+		</svg>
+	</div>
+	<script>
+		var _dashoffset = document.querySelector(".dashoffset");
+		//console.log(_dashoffset.getAttribute("stroke-dashoffset"))
+		var timer = null;
+		window.addEventListener("keydown",function(e){
+			if(e.keyCode === 16){
+				timer = timer?timer:setInterval(()=>{ var strokeDashoffset = _dashoffset.getAttribute("stroke-dashoffset");console.log(strokeDashoffset); _dashoffset.setAttribute("stroke-dashoffset",1+ Number(strokeDashoffset))},1000/30)
+			}else{
+				
+				clearInterval(timer);
+				timer = null;
+			}
+		})
+		//var timer = setInterval(()=>{ var strokeDashoffset = _dashoffset.getAttribute("stroke-dashoffset");console.log(strokeDashoffset); _dashoffset.setAttribute("stroke-dashoffset",1+ Number(strokeDashoffset))},100)
+	</script>
+</body>
+</html>

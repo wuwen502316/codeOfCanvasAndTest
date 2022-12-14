@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>菜鸟教程(runoob.com)</title>
+</head>
+<body>
+<div id="app"></div>
+</body>
+</html>
+<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+
+<script>
+const template3 = `<div><div :style="styleObject?styleObject:styleObj"><slot></slot></div></div>`
+const child3 = Vue.component("child3",{
+props:['styleObject'],
+data(){
+return {styleObj:{color:'yellow',border:"1px solid red",fontSize:"20px"},msg:"子组件3"}
+},
+template:template3
+})
+
+const child1 = Vue.component("child1",{
+template:`<div style="color:red">child1</div>`
+})
+Vue.component("Child2",{
+data(){return{name:"子模版2",text:{one:"向父模板发送数据",two:"child2接收到props的参数:"}}},
+props:['age'],
+methods:{sendMessageToParent(){this.$emit("message","来自子组件的数据child2")}},
+template:`<div><div>{{text.two+age}}</div><button @click="sendMessageToParent">{{text.one}}</button></div>`
+
+})
+const errorMsg = Vue.component("Error",{
+template:`<div>error组件<slot></slot></div>`
+})
+new Vue({
+el:"#app",
+components:{"Child1":child1,'Child3':child3,"ErrorMsg":errorMsg},
+template:`<div><Child1>{{age}}</Child1><Child2 :age="age" @message="getM"></Child2><p>{{args?args:"没有接受到来自子组件的数据"}}</p><input type="button"value="清除数据" v-on:click="clearData"/><div style="margin:50px"><Child3 :styleObject="style" @click="sendStyle"><p>子df组件3</p></Child3></div>
+<div style="margin:20px 10px;color:red"><strong>Error!!!!!!!!</strong><ErrorMsg><em>Something bad happened.</em></ErrorMsg></div>
+<div style="margin:20px 10px;color:red"><strong>Error!!!!!!!!</strong><br/><ErrorMsg>Something bad happened.</ErrorMsg></div>
+<div><component v-bind:is="current">{{age}}</component><component v-bind:is="current">{{age}}</component><component v-bind:is="current">{{age}}</component><component v-bind:is="current">{{age}}</component><component v-bind:is="com()"></component></div>
+</div>`,
+data:{age:11,args:"",style:null,currentcomponents:"ErrorMsg"},
+methods:{
+com(){
+return this.currentcomponents
+},
+sendStyle(){this.style = {margin:0,width:"500px",height:"200px",color:"red",border:"2px dashed black"}},
+getM(argments){this.args = argments},
+clearData(){this.args = null}
+},
+computed:{
+current(){
+this.age++;
+return this.currentcomponents
+}
+}
+})
+</script>

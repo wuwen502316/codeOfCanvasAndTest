@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>dragonQuest</title>
+<script src="https://cdn.jsdelivr.net/npm/jquery/dist/jquery.min.js"></script>
+
+</head>
+<style>
+body{
+overflow-x:hidden;
+}
+	.audio{
+		position: absolute;
+		top:50%;
+		left:50%;
+		transform:translate(-50%,-50%);
+		
+	}
+	div{
+		z-index:1111;
+		width:100%;height:100px;position:fixed;
+		background:#FFF;
+	}
+	span{
+		display:block;
+		width:100%;
+		min-height:800px;
+		top:100px;
+		position:relative;
+		background-color:white;
+	}
+button{
+position:absolute;
+top:20px;right:20px;
+}
+button:nth-child(odd){right:100px}
+span p{margin:0;padding:0;}
+@keyframes moveOut{
+	from{transform:translateX(0px)}
+	to{transform:translateX(100%)}
+
+}
+@keyframes moveBack{
+	from{transform:translateX(100%)}
+	to{transform:translateX(0px)}
+}
+.moveOut{
+	animation: moveOut ease .3s;
+	animation-fill-mode:forwards;
+}
+.moveBack{
+	animation: moveBack ease .3s;
+	animation-fill-mode:forwards;
+}
+</style>
+<body style="margin:0;padding:0;height:500px;">
+<div><button onclick=transformX(this)>提交</button></div>
+
+<span style="width:100%;height:200%;display:block;background-color:red;"></span>
+<script>
+var flag = false;
+function transformX(e){
+	e.innerHTML = flag?"提交":"返回";
+	
+	var span = document.querySelector("span");
+	//console.log(span);
+	span.className= flag?"moveBack":"moveOut";
+	flag = !flag;
+}
+function _getComputedStyle(dom,attr){
+return dom.style[attr] || getComputedStyle(dom,false)[attr];
+
+}
+var div = document.querySelector("div");
+var h = parseFloat(_getComputedStyle(div,'height'));
+//window.h = div.style.height;
+document.addEventListener("scroll",()=>{var top = document.documentElement.scrollTop;if(top>=h/2){div.style.boxShadow="0px 0px 10px rgb(0 0 0 / 10%)"}else if(top<h/2){div.style.boxShadow=""}})
+</script>
+
+</body>
+</html>
+<script charset="utf-8" type='text/javascript'>
+var audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+var source;
+function _ajax(url,callBack) {
+	var xhr = new XMLHttpRequest();
+	xhr.open('GET', url, true);
+	//xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+	xhr.responseType = 'arraybuffer';
+	xhr.send({name:1});
+	xhr.onload = function() {
+		callBack(xhr);
+	};
+	//function(e){"Error with decoding audio data" + e.err};
+	
+	
+}
+ function getDate(){
+	source = audioCtx.createBufferSource();
+	_ajax("https://wuwen502316.github.io/test/1.mp3",function(xhr){
+		audioData = xhr.response;
+		audioCtx.decodeAudioData(audioData, function(buffer) {
+		source.buffer = buffer;
+		source.connect(audioCtx.destination);
+		source.loop = true;
+		})
+	});
+
+}
+function audioPlay(){
+	getDate();
+	source.start(0);
+	document.removeEventListener("click",audioPlay);
+}
+
+document.addEventListener("click",audioPlay);
+
+</script>
+
+

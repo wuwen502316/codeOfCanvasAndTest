@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+<body>
+<div id="demo"></div>
+<button type="button"
+onclick="document.getElementById('demo').innerHTML = arcToBezier(1,0,0,0,Math.PI/2)">
+点击这里来显示日期和时间
+</button>
+
+<svg width="500px" height="500px">
+<path d="M0 0L100 100" stroke="red"fill="none"></path>
+<path d="M100 100C155.228 100 200 155.228 200 200" stroke="blue"fill="none"></path>
+<path d="M200 200C200 255.228 155.228 300 100 300" stroke="red" fill="none"></path>
+<path d="M100 300C55.228 300 0 255.228 0 200" stroke="gray"fill="none"></path>
+<path d="M100 100C155.228 100 200 155.228 200 200" stroke="yellow"fill="none"></path>
+</svg>
+</body>
+
+</html>
+<script>
+function arcToBezier(r,cx,cy,startAngle,endAngle){
+      var x0 = cx + Math.cos(startAngle)*r;
+      var y0 = cy + Math.sin(startAngle)*r;
+      var x3 = cx + Math.cos(endAngle)*r;
+      var y3 = cy + Math.sin(endAngle)*r;
+      var addAngle = endAngle - startAngle;
+      var a = 4*Math.tan(addAngle/4)/3;
+      var x1 = x0 - a*(y0 - cy);
+      var y1 = y0 + a*(x0 - cx);
+      var x2 = x3 + a*(y3 - cy);
+      var y2 = y3 - a*(x3 - cx);
+      var pointArr = {
+        "x0":x0,"y0":y0,
+        "x1":x1,"y1":y1,
+        "x2":x2,"y2":y2,
+        "x3":x3,"y3":y3
+      }
+      console.log(pointArr,pointArr.x3)
+      return pointArr;
+  }
+</script>

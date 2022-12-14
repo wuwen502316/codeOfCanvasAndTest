@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>dragonQuest</title>
+</head>
+<style>
+	.audio{
+		position: absolute;
+		top:50%;
+		left:50%;
+		transform:translate(-50%,-50%)
+	}
+</style>
+<body>
+
+<div class='audio'>
+	<audio controls="controls" autoplay="autoplay" src="./1.mp3" >
+		 <source data-src = "./1.ogg" src type="audio/ogg" />
+  <source data-src = "./1.mpeg" src type="audio/mpeg" />
+		Your browser does not support the audio element.
+	</audio>
+</div>
+
+
+</body>
+</html>
+<script charset="utf-8" type='text/javascript'>
+var mp
+async function a(){
+mp = await fetch('./1.mp3');
+console.log(mp,1)
+}
+async function b(){
+mp = await fetch('/1.mp3');
+console.log(mp,2)
+}
+ a();
+b();
+
+   
+</script>
+
+
